@@ -153,6 +153,9 @@ LayoutBuilder.prototype.addBackground = function(background) {
     var pageBackground = backgroundGetter(this.writer.context().page + 1);
 
     if (pageBackground) {
+			if (pageBackground.resetXY)
+				pageBackground.resetXY();
+				
       var pageSize = this.writer.context().getCurrentPage().pageSize;
       this.writer.beginUnbreakableBlock(pageSize.width, pageSize.height);
       this.processNode(this.docMeasure.measureDocument(pageBackground));
@@ -265,7 +268,7 @@ LayoutBuilder.prototype.addWatermark = function(watermark, fontProvider){
 };
 
 function decorateNode(node){
-  var x = node.x, y = node.y;
+  var x = node.x || 0, y = node.y || 0;
   node.positions = [];
 
   _.each(node.canvas, function(vector){
